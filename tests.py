@@ -7,9 +7,15 @@ from convert_numerals import roman_numerals_to_int
 
 class TestPrimeNumbers:
     @pytest.mark.parametrize("low, high, expected_result", [
+        (1, 1, []),
+        (7, 7, [7]),
         (1, 7, [2, 3, 5, 7]),
         (22, 30, [23, 29]),
         (0, 1, []),
+        (1, 100, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]),
+        (7, 15, [7, 11, 13]),
+        (7, 13, [7, 11, 13]),
+        (44, 46, []),
     ])
     def test_prime_numbers(self, low, high, expected_result):
         assert prime_numbers(low, high) == expected_result
@@ -17,9 +23,10 @@ class TestPrimeNumbers:
     @pytest.mark.parametrize("low, high", [
         (10, 0),
         (-5, -1),
+        (-5, 10),
     ])
     def test_correct_input(self, low, high):
-        with pytest.raises(IndexError):
+        with pytest.raises(ValueError):
             assert prime_numbers(low, high)
 
     @pytest.mark.parametrize("low, high", [
@@ -71,6 +78,8 @@ class TestTextStat:
             expected = json.load(fp)
         assert TestTextStat.compare_text_stats(result, expected)
 
+    def test_text_stat_error(self):
+        assert text_stat("file_that_not_exist.txt") == {"error": "File not found"}
 
 class TestRomanNumbersToInt:
     @pytest.mark.parametrize("roman_numeral, expected_result", [
